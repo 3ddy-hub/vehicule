@@ -47,6 +47,11 @@ class Proprietaire
      */
     private $tel;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Voiture::class, inversedBy="proprietaires")
+     */
+    private $voiture;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -120,6 +125,18 @@ class Proprietaire
     public function setTel(int $tel): self
     {
         $this->tel = $tel;
+
+        return $this;
+    }
+
+    public function getVoiture(): ?Voiture
+    {
+        return $this->voiture;
+    }
+
+    public function setVoiture(?Voiture $voiture): self
+    {
+        $this->voiture = $voiture;
 
         return $this;
     }

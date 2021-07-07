@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\VoitureRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -31,6 +33,21 @@ class Voiture
      * @ORM\Column(type="integer")
      */
     private $kilometrage;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Proprietaire::class, mappedBy="voiture")
+     */
+    private $proprietaires;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Modele::class, inversedBy="voitures")
+     */
+    private $modele;
+
+    public function __construct()
+    {
+        $this->proprietaires = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -69,6 +86,48 @@ class Voiture
     public function setKilometrage(int $kilometrage): self
     {
         $this->kilometrage = $kilometrage;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Proprietaire[]
+     */
+    public function getProprietaires(): Collection
+    {
+        return $this->proprietaires;
+    }
+
+    public function addProprietaire(Proprietaire $proprietaire): self
+    {
+        if (!$this->proprietaires->contains($proprietaire)) {
+            $this->proprietaires[] = $proprietaire;
+            $proprietaire->setVoiture($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProprietaire(Proprietaire $proprietaire): self
+    {
+        if ($this->proprietaires->removeElement($proprietaire)) {
+            // set the owning side to null (unless already changed)
+            if ($proprietaire->getVoiture() === $this) {
+                $proprietaire->setVoiture(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getModele(): ?Modele
+    {
+        return $this->modele;
+    }
+
+    public function setModele(?Modele $modele): self
+    {
+        $this->modele = $modele;
 
         return $this;
     }

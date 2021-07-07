@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ModeleRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -36,6 +38,16 @@ class Modele
      * @ORM\Column(type="string", length=15)
      */
     private $carburant;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Voiture::class, mappedBy="modele")
+     */
+    private $voitures;
+
+    public function __construct()
+    {
+        $this->voitures = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -86,6 +98,36 @@ class Modele
     public function setCarburant(string $carburant): self
     {
         $this->carburant = $carburant;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Voiture[]
+     */
+    public function getVoitures(): Collection
+    {
+        return $this->voitures;
+    }
+
+    public function addVoiture(Voiture $voiture): self
+    {
+        if (!$this->voitures->contains($voiture)) {
+            $this->voitures[] = $voiture;
+            $voiture->setModele($this);
+        }
+
+        return $this;
+    }
+
+    public function removeVoiture(Voiture $voiture): self
+    {
+        if ($this->voitures->removeElement($voiture)) {
+            // set the owning side to null (unless already changed)
+            if ($voiture->getModele() === $this) {
+                $voiture->setModele(null);
+            }
+        }
 
         return $this;
     }
