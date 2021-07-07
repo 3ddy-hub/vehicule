@@ -11,7 +11,7 @@ $(document).ready(function () {
         "iDisplayLength": 10,
         "responsive": true,
         "ajax": {
-            url: url_voiture_ajax_list,
+            url: url_proprietary_ajax_list,
             data: function (data) {
                 if (data.order[0])
                     data.order_by = data.columns[data.order[0].column].name + ' ' + data.order[0].dir;
@@ -19,25 +19,37 @@ $(document).ready(function () {
         },
         "columnDefs": [
             {
-                name: "modele",
+                name: "marque",
                 targets: 0
             },
             {
-                name: "immatriculation",
+                name: "nom",
                 targets: 1
             },
             {
-                name: "couleur",
+                name: "prenom",
                 targets: 2
             },
             {
-                name: "kilometrage",
+                name: "addresse",
                 targets: 3
             },
             {
-                name: "voiture_id",
+                name: "code_postal",
+                targets: 4
+            },
+            {
+                name: "ville",
+                targets: 5
+            },
+            {
+                name: "tel",
+                targets: 6
+            },
+            {
+                name: "propertary_id",
                 orderable: false,
-                targets: 4,
+                targets: 7,
                 render: function (data) {
                     href_edit = edit_path.replace('0', data);
                     href_delete = delete_path.replace('0', data);

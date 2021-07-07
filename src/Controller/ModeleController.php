@@ -87,7 +87,7 @@ class ModeleController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="modele_delete")
+     * @Route("/{id}/delete", name="modele_delete")
      */
     public function delete(Modele $modele)
     {

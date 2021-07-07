@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Proprietaire;
+use App\Entity\Voiture;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -70,23 +71,24 @@ class ProprietaireRepository extends ServiceEntityRepository
      * @return array
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function listModele($page, $nb_max_page, $search, $order_by)
+    public function listPropretary($page, $nb_max_page, $search, $order_by)
     {
         $order_by   = $order_by ? $order_by : "p.id DESC";
         $propretary = $this->getEntityName();
 
         $dql = "SELECT 
-                    v.marque marque,
+                    m.marque marque,
                     p.nom nom,
                     p.prenom prenom,
                     p.addresse addresse,
                     p.code_postal code_postal,
                     p.ville ville,
                     p.tel tel,
-                    p.id propertary_id,
+                    p.id propertary_id
                 FROM $propretary p
                 LEFT JOIN p.voiture v 
-                WHERE v.marque LIKE :search 
+                LEFT JOIN v.modele m
+                WHERE m.marque LIKE :search 
                     OR p.nom LIKE :search 
                     OR p.prenom LIKE :search
                     OR p.addresse LIKE :search
@@ -115,7 +117,8 @@ class ProprietaireRepository extends ServiceEntityRepository
         $dql = "SELECT COUNT (p) total_number 
                 FROM $modele p 
                 LEFT JOIN p.voiture v
-                WHERE v.marque LIKE :search 
+                LEFT JOIN v.modele m
+                WHERE m.marque LIKE :search 
                     OR p.nom LIKE :search 
                     OR p.prenom LIKE :search
                     OR p.addresse LIKE :search
@@ -127,5 +130,22 @@ class ProprietaireRepository extends ServiceEntityRepository
         $_query->setParameter('search', "%$search%");
 
         return $_query->getOneOrNullResult()['total_number'];
+    }
+
+    /**
+     * @return int|mixed|string
+     */
+    public function selectionnerVoiture()
+    {
+        $voiture = Voiture::class;
+        $dql     = "SELECT 
+                        m.modele modele,
+                        m.marque marque,
+                        v.id voiture_id 
+                    FROM $voiture v 
+                    LEFT JOIN v.modele m";
+        $query   = $this->_em->createQuery($dql);
+
+        return $query->getResult();
     }
 }

@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Proprietaire;
 use App\Form\ProprietaireType;
 use App\Repository\ProprietaireRepository;
+use App\Repository\VoitureRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,16 +19,21 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class ProprietaireController extends AbstractController
 {
     private $propretary_repository;
+    private $voiture_repository;
     private $translator;
 
     /**
      * ProprietaireController constructor.
      * @param ProprietaireRepository $proprietaire_repository
+     * @param VoitureRepository $voiture_repository
      * @param TranslatorInterface $translator
      */
-    public function __construct(ProprietaireRepository $proprietaire_repository, TranslatorInterface $translator)
+    public function __construct(ProprietaireRepository $proprietaire_repository,
+                                VoitureRepository $voiture_repository,
+                                TranslatorInterface $translator)
     {
         $this->propretary_repository = $proprietaire_repository;
+        $this->voiture_repository    = $voiture_repository;
         $this->translator            = $translator;
     }
 
@@ -49,6 +55,8 @@ class ProprietaireController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $voiture = $this->voiture_repository->find($request->request->get('voiture'));
+            $voiture ? $proprietaire->setVoiture($voiture) : null;
             $is_create = $this->propretary_repository->savePropretary($proprietaire, 'new');
             if ($is_create) {
                 return $this->redirectToRoute('proprietaire_index');
@@ -58,6 +66,8 @@ class ProprietaireController extends AbstractController
         return $this->render('proprietaire/new.html.twig', [
             'proprietaire' => $proprietaire,
             'form'         => $form->createView(),
+            'type'         => 'new',
+            'voitures'     => $this->propretary_repository->selectionnerVoiture()
         ]);
     }
 
@@ -70,6 +80,8 @@ class ProprietaireController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $voiture = $this->voiture_repository->find($request->request->get('voiture'));
+            $voiture ? $proprietaire->setVoiture($voiture) : null;
             $is_update = $this->propretary_repository->savePropretary($proprietaire, 'update');
             if ($is_update) {
                 return $this->redirectToRoute('proprietaire_index');
@@ -78,12 +90,14 @@ class ProprietaireController extends AbstractController
 
         return $this->render('proprietaire/edit.html.twig', [
             'proprietaire' => $proprietaire,
+            'type'         => 'update',
             'form'         => $form->createView(),
+            'voitures'     => $this->propretary_repository->selectionnerVoiture()
         ]);
     }
 
     /**
-     * @Route("/{id}", name="proprietaire_delete")
+     * @Route("/{id}/delete", name="proprietaire_delete")
      */
     public function delete(Proprietaire $proprietaire)
     {
@@ -107,7 +121,7 @@ class ProprietaireController extends AbstractController
         $nb_max_page = $request->query->get('length');
         $search      = $request->query->get('search')['value'];
         $order_by    = $request->query->get('order_by');
-        $datas       = $this->propretary_repository->listModele($page, $nb_max_page, $search, $order_by);
+        $datas       = $this->propretary_repository->listPropretary($page, $nb_max_page, $search, $order_by);
 
         return new JsonResponse([
             'recordsTotal'    => $datas[1],

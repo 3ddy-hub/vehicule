@@ -1,4 +1,24 @@
-{{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
+{{ form_start(form,{'attr':{'id':'propertary_form'}}) }}
+<div class="card-body col-6">
+    <div>
+        <select class="form-control" name="voiture" id="">
+            {% if type == 'update' %}
+                <option value="{{ proprietaire.voiture.id }}">{{ proprietaire.voiture.modele.modele }}
+                    - {{ proprietaire.voiture.modele.marque }} </option>
+            {% endif %}
+            {% for key,v in voitures %}
+                <option value="{{ v.voiture_id }}">{{ v.modele }} - {{ v.marque }} </option>
+            {% endfor %}
+        </select>
+    </div>
+    {{ form_row(form.nom) }}
+    {{ form_row(form.prenom) }}
+    {{ form_row(form.addresse) }}
+    {{ form_row(form.ville) }}
+    {{ form_row(form.tel) }}
+    {{ form_row(form.code_postal) }}
+    <div class="form-group mb-0">
+        <button type="submit" class="btn btn-primary">{{ 'bo.save'|trans }}</button>
+    </div>
+</div>
 {{ form_end(form) }}

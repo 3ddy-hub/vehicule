@@ -33,6 +33,7 @@
                                     <th>{{ 'bo.firstname'|trans }}</th>
                                     <th>{{ 'bo.address'|trans }}</th>
                                     <th>{{ 'bo.postal.code'|trans }}</th>
+                                    <th>{{ 'bo.ville'|trans }}</th>
                                     <th>{{ 'bo.tel'|trans }}</th>
                                     <th>{{ 'bo.action'|trans }}</th>
                                 </tr>
@@ -50,7 +51,7 @@
     {{ parent() }}
     <script>
         // url ajax
-        let url_proprietary_ajax_list = "{{ path('voiture_ajax_list') }}";
+        let url_proprietary_ajax_list = "{{ path('propretary_ajax_list') }}";
         // btn ud
         let edit_path = "{{ path('proprietaire_edit',{'id':0}) }}"
         let delete_path = "{{ path('proprietaire_delete',{'id':0}) }}"
