@@ -14,37 +14,109 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class VoitureRepository extends ServiceEntityRepository
 {
+    /**
+     * VoitureRepository constructor.
+     * @param ManagerRegistry $registry
+     */
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Voiture::class);
     }
 
-    // /**
-    //  * @return Voiture[] Returns an array of Voiture objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    /**
+     * @param $voiture
+     * @param $action
+     * @return bool
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    public function saveVoiture($voiture, $action)
     {
-        return $this->createQueryBuilder('v')
-            ->andWhere('v.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('v.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
+        $is_save = false;
+        if ($voiture instanceof Voiture) {
+            if ($action = 'new') {
+                $this->_em->persist($voiture);
+            }
+            $this->_em->flush();
+            $is_save = true;
+        }
 
-    /*
-    public function findOneBySomeField($value): ?Voiture
-    {
-        return $this->createQueryBuilder('v')
-            ->andWhere('v.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        return $is_save;
     }
-    */
+
+    /**
+     * @param $voiture
+     * @return bool
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    public function deleteVoiture($voiture)
+    {
+        $is_deleted = false;
+        if ($voiture instanceof Voiture) {
+            $this->_em->remove($voiture);
+            $this->_em->flush();
+            $is_deleted = true;
+        }
+
+        return $is_deleted;
+    }
+
+    /**
+     * @param $page
+     * @param $nb_max_page
+     * @param $search
+     * @param $order_by
+     * @return array
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function listVoiture($page, $nb_max_page, $search, $order_by)
+    {
+        $order_by = $order_by ? $order_by : "v.id DESC";
+        $voiture  = $this->getEntityName();
+
+        $dql = "SELECT 
+                    m.modele modele,
+                    v.immatriculation immatriculation,
+                    v.couleur couleur,
+                    v.kilometrage kilometrage,
+                    v.id voiture_id
+                FROM $voiture v 
+                LEFT JOIN v.modele m
+                WHERE v.immatriculation LIKE :search 
+                    OR m.modele LIKE :search 
+                    OR v.couleur LIKE :search 
+                    OR v.kilometrage LIKE :search
+                ORDER BY $order_by";
+
+        $query = $this->_em->createQuery($dql);
+        $query->setParameter('search', "%$search%")
+            ->setFirstResult($page)
+            ->setMaxResults($nb_max_page);
+
+        return [$query->getResult(), $this->compteData($search)];
+    }
+
+    /**
+     * @param $search
+     * @return mixed
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    private function compteData($search)
+    {
+        $voiture = $this->getEntityName();
+
+        $dql = "SELECT COUNT (v) total_number 
+                FROM $voiture v 
+                LEFT JOIN v.modele m  
+                WHERE v.immatriculation LIKE :search 
+                    OR m.modele LIKE :search 
+                    OR v.couleur LIKE :search 
+                    OR v.kilometrage LIKE :search";
+
+        $_query = $this->_em->createQuery($dql);
+        $_query->setParameter('search', "%$search%");
+
+        return $_query->getOneOrNullResult()['total_number'];
+    }
 }

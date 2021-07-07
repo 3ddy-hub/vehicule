@@ -1,0 +1,57 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'bo.voitures'|trans }}{% endblock %}
+
+{% set voiture_link = true %}
+
+{% block breadcrumb %}
+    {% include 'partials/breadcrumb.html.twig' with {
+        'title' : 'bo.voitures'|trans,
+    } %}
+{% endblock %}
+{% block container %}
+    <section class="content">
+        <div class="container-fluid">
+            {% for message in app.flashes('success') %}
+                <div class="alert alert-success">
+                    {{ message }}
+                </div>
+            {% endfor %}
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <a href="{{ path('voiture_new') }}" class="btn btn-outline-primary btn-sm"><i
+                                        class="fa fa-plus"></i> {{ 'bo.add'|trans }}</a>
+                        </div>
+                        <div class="card-body">
+                            <table id="voiture-list" class="table table-bordered table-striped">
+                                <thead>
+                                <tr>
+                                    <th>{{ 'bo.model'|trans }}</th>
+                                    <th>{{ 'bo.immatriculation'|trans }}</th>
+                                    <th>{{ 'bo.color'|trans }}</th>
+                                    <th>{{ 'bo.km'|trans }}</th>
+                                    <th>{{ 'bo.action'|trans }}</th>
+                                </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        // url ajax
+        let url_voiture_ajax_list = "{{ path('voiture_ajax_list') }}";
+        // btn ud
+        let edit_path = "{{ path('voiture_edit',{'id':0}) }}"
+        let delete_path = "{{ path('voiture_delete',{'id':0}) }}"
+    </script>
+    <script src="{{ asset('js/voiture.ajax.list.js') }}"></script>
+{% endblock %}
