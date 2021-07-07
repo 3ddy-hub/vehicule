@@ -1,0 +1,9 @@
+{{ form_start(form,{'attr':{'id':'user_form'}}) }}
+<div class="card-body">
+    {{ form_row(form.username) }}
+    {{ form_row(form.email) }}
+    <div class="form-group mb-0">
+        <button type="submit" class="btn btn-primary">{{ 'bo.save'|trans }}</button>
+    </div>
+</div>
+{{ form_end(form) }}

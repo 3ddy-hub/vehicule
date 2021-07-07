@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}{% endblock %}</title>
+    {% block stylesheets %}
+        {% include 'partials/stylesheets.html.twig' %}
+    {% endblock %}
+</head>
+<body class="hold-transition sidebar-mini layout-fixed">
+<div class="wrapper">
+{#    {% include 'partials/preloader.html.twig' %}#}
+    {% include 'partials/navbar.html.twig' %}
+    {% include 'partials/sidebar.html.twig' %}
+    <div class="content-wrapper">
+        {% block breadcrumb %}
+            {% include 'partials/breadcrumb.html.twig' %}
+        {% endblock %}
+        {% block container %}{% endblock %}
+    </div>
+    {% include 'partials/footer.html.twig' %}
+</div>
+{% block javascripts %}
+    {% include 'partials/javascrits.html.twig' %}
+{% endblock %}
+</body>
+</html>

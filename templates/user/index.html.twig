@@ -1,0 +1,64 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'bo.users'|trans }}{% endblock %}
+
+{% set users_link = true %}
+
+{% block breadcrumb %}
+    {% include 'partials/breadcrumb.html.twig' with {
+        'title' : 'bo.users'|trans,
+    } %}
+{% endblock %}
+{% block container %}
+    <section class="content">
+        <div class="container-fluid">
+            {% for message in app.flashes('success') %}
+                <div class="alert alert-success">
+                    {{ message }}
+                </div>
+            {% endfor %}
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <a href="{{ path('user_new') }}" class="btn btn-outline-primary btn-sm"><i
+                                        class="fa fa-plus"></i> {{ 'bo.add'|trans }}</a>
+                        </div>
+                        <div class="card-body">
+                            <table id="user-list" class="table table-bordered table-striped">
+                                <thead>
+                                <tr>
+                                    <th>{{ 'bo.profil'|trans }}</th>
+                                    <th>{{ 'bo.username'|trans }}</th>
+                                    <th>{{ 'bo.email'|trans }}</th>
+                                    <th>{{ 'bo.role'|trans }}</th>
+                                    <th>{{ 'bo.date.hour.create'|trans }}</th>
+                                    <th>{{ 'bo.action'|trans }}</th>
+                                </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        // url ajax
+        let url_user_ajax_list = "{{ path('user_ajax_list') }}";
+        // text externe
+        let superadmin_text = "{{ 'bo.superadmin'|trans }}";
+        let user_text = "{{ 'bo.user'|trans }}";
+        // btn rud
+        let view_path = "{{ path('user_show',{'id':0}) }}"
+        let edit_path = "{{ path('user_edit',{'id':0}) }}"
+        let delete_path = "{{ path('user_delete',{'id':0}) }}"
+    </script>
+    <script src="{{ asset('js/user.ajax.list.js') }}"></script>
+    <script src="{{ asset('js/user.js') }}"></script>
+    <script src="{{ asset('js/general.js') }}"></script>
+{% endblock %}

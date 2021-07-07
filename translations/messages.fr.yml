@@ -1,0 +1,31 @@
+bo.dashboard: Tableau de bord
+bo.users: Utilisateurs
+bo.user: Utilisateur
+bo.superadmin: Superadmin
+bo.general: Général
+bo.action: Actions
+bo.add: Ajouter
+bo.delete: Supprimer
+bo.return: Retour
+bo.save: Enregistrer
+bo.view: Voir
+bo.edit: Modifier
+bo.confirm.delete: Voulez-vous vraiment supprimer ?
+# flash bag message
+bo.add.succefuly: Ajout avec succès !
+bo.update.succefuly: Modification avec succès !
+bo.delete.succefuly: Suppression avec succès !
+bo.exist: Donnée déjà existe !
+bo.exist.email: Adresse email déjà existe !
+# utilisateur
+bo.email: Email
+bo.profil: Profile
+bo.username: Nom
+bo.role: Rôle
+bo.date.hour.create: Date et heure de création
+# validation
+bo.field.text.required: Ce champ est requis.
+bo.field.email.required: Veuillez saisir une adresse e-mail.
+bo.field.email.required.valid: Veuillez entrer une adresse e-mail valide.
+bo.field.password.required: Veuillez fournir un mot de passe.
+bo.field.password.required.length: Votre mot de passe doit comporter au moins 6 caractères.
