@@ -32,9 +32,9 @@ class ModeleRepository extends ServiceEntityRepository
      */
     public function saveModele($model, $action)
     {
-        $is_save     = false;
+        $is_save = false;
         if ($model instanceof Modele) {
-            if ($action = 'new') {
+            if ($action == 'new') {
                 $this->_em->persist($model);
             }
             $this->_em->flush();

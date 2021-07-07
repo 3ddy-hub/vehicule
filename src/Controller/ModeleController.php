@@ -46,20 +46,16 @@ class ModeleController extends AbstractController
      */
     public function new(Request $request): Response
     {
-        $redirection = '';
-        $modele      = new Modele();
-        $form        = $this->createForm(ModeleType::class, $modele);
+        $modele = new Modele();
+        $form   = $this->createForm(ModeleType::class, $modele);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $is_create = $this->modele_repository->saveModele($modele, 'new');
             if ($is_create) {
                 $this->addFlash('success', $this->translator->trans('bo.add.succefuly'));
-                $redirection = $this->redirectToRoute('voiture_index');
-            } else {
-                $this->addFlash('danger', $this->translator->trans('bo.exist.im'));
-                $redirection = $this->redirectToRoute('voiture_new');
             }
-            return $redirection;
+
+            return $this->redirectToRoute('modele_index');
         }
 
         return $this->render('modele/new.html.twig', [
@@ -73,20 +69,15 @@ class ModeleController extends AbstractController
      */
     public function edit(Request $request, Modele $modele): Response
     {
-        $redirection = '';
-        $form        = $this->createForm(ModeleType::class, $modele);
+        $form = $this->createForm(ModeleType::class, $modele);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $is_update = $this->modele_repository->saveModele($modele, 'update');
             if ($is_update) {
                 $this->addFlash('success', $this->translator->trans('bo.update.succefuly'));
-                $redirection = $this->redirectToRoute('modele_index');
-            } else {
-                $this->addFlash('danger', $this->translator->trans('bo.exist.im'));
-                $redirection = $this->redirectToRoute('modele_edit', ['id' => $modele->getId()]);
             }
-            return $redirection;
+            return $this->redirectToRoute('modele_index');
         }
 
         return $this->render('modele/edit.html.twig', [
