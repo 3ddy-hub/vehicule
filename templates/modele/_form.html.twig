@@ -1,0 +1,11 @@
+{{ form_start(form,{'attr':{'id':'model_form'}}) }}
+<div class="card-body col-6">
+        {{ form_row(form.modele) }}
+        {{ form_row(form.marque) }}
+        {{ form_row(form.puissance) }}
+        {{ form_row(form.carburant) }}
+    <div class="form-group mb-0">
+        <button type="submit" class="btn btn-primary">{{ 'bo.save'|trans }}</button>
+    </div>
+</div>
+{{ form_end(form) }}

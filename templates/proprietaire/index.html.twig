@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Proprietaire index{% endblock %}
+
+{% block body %}
+    <h1>Proprietaire index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nom</th>
+                <th>Prenom</th>
+                <th>Addresse</th>
+                <th>Code_postal</th>
+                <th>Ville</th>
+                <th>Tel</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for proprietaire in proprietaires %}
+            <tr>
+                <td>{{ proprietaire.id }}</td>
+                <td>{{ proprietaire.nom }}</td>
+                <td>{{ proprietaire.prenom }}</td>
+                <td>{{ proprietaire.addresse }}</td>
+                <td>{{ proprietaire.codePostal }}</td>
+                <td>{{ proprietaire.ville }}</td>
+                <td>{{ proprietaire.tel }}</td>
+                <td>
+                    <a href="{{ path('proprietaire_show', {'id': proprietaire.id}) }}">show</a>
+                    <a href="{{ path('proprietaire_edit', {'id': proprietaire.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="8">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('proprietaire_new') }}">Create new</a>
+{% endblock %}

@@ -16,6 +16,7 @@ bo.add.succefuly: Ajout avec succès !
 bo.update.succefuly: Modification avec succès !
 bo.delete.succefuly: Suppression avec succès !
 bo.exist: Donnée déjà existe !
+bo.exist.im: Immatriculation déjà existe !
 bo.exist.email: Adresse email déjà existe !
 # utilisateur
 bo.email: Email
@@ -29,3 +30,17 @@ bo.field.email.required: Veuillez saisir une adresse e-mail.
 bo.field.email.required.valid: Veuillez entrer une adresse e-mail valide.
 bo.field.password.required: Veuillez fournir un mot de passe.
 bo.field.password.required.length: Votre mot de passe doit comporter au moins 6 caractères.
+
+# voiture
+bo.immatriculation : Immatriculation
+bo.color: Couleur
+bo.km: Kilometrage
+bo.voiture: Voiture
+bo.voitures: Voitures
+
+# model
+bo.model: Modèle
+bo.models: Modèles
+bo.brand: Marque
+bo.puissance: Puissance
+bo.carburant: Carburant

@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    $("#voiture-list").DataTable({
+    $("#model-list").DataTable({
         "language": {
             url: datatable_lannguage
         },
@@ -11,7 +11,7 @@ $(document).ready(function () {
         "iDisplayLength": 10,
         "responsive": true,
         "ajax": {
-            url: url_voiture_ajax_list,
+            url: url_model_ajax_list,
             data: function (data) {
                 if (data.order[0])
                     data.order_by = data.columns[data.order[0].column].name + ' ' + data.order[0].dir;
@@ -23,19 +23,19 @@ $(document).ready(function () {
                 targets: 0
             },
             {
-                name: "immatriculation",
+                name: "marque",
                 targets: 1
             },
             {
-                name: "couleur",
+                name: "puissance",
                 targets: 2
             },
             {
-                name: "kilometrage",
+                name: "carburant",
                 targets: 3
             },
             {
-                name: "voiture_id",
+                name: "model_id",
                 orderable: false,
                 targets: 4,
                 render: function (data) {

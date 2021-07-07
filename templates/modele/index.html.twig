@@ -1,0 +1,57 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'bo.models'|trans }}{% endblock %}
+
+{% set modele_link = true %}
+
+{% block breadcrumb %}
+    {% include 'partials/breadcrumb.html.twig' with {
+        'title' : 'bo.models'|trans,
+    } %}
+{% endblock %}
+{% block container %}
+    <section class="content">
+        <div class="container-fluid">
+            {% for message in app.flashes('success') %}
+                <div class="alert alert-success">
+                    {{ message }}
+                </div>
+            {% endfor %}
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <a href="{{ path('modele_new') }}" class="btn btn-outline-primary btn-sm"><i
+                                        class="fa fa-plus"></i> {{ 'bo.add'|trans }}</a>
+                        </div>
+                        <div class="card-body">
+                            <table id="model-list" class="table table-bordered table-striped">
+                                <thead>
+                                <tr>
+                                    <th>{{ 'bo.model'|trans }}</th>
+                                    <th>{{ 'bo.brand'|trans }}</th>
+                                    <th>{{ 'bo.puissance'|trans }}</th>
+                                    <th>{{ 'bo.carburant'|trans }}</th>
+                                    <th>{{ 'bo.action'|trans }}</th>
+                                </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        // url ajax
+        let url_model_ajax_list = "{{ path('model_ajax_list') }}";
+        // btn ud
+        let edit_path = "{{ path('modele_edit',{'id':0}) }}"
+        let delete_path = "{{ path('modele_delete',{'id':0}) }}"
+    </script>
+    <script src="{{ asset('js/model.ajax.list.js') }}"></script>
+{% endblock %}

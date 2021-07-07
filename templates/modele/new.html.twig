@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'bo.model'|trans }}{% endblock %}
+
+{% set modele_link = true %}
+
+{% block breadcrumb %}
+    {% include 'partials/breadcrumb.html.twig' with {
+        'title' : 'bo.model'|trans,
+    } %}
+{% endblock %}
+{% block container %}
+    <section class="content">
+        <div class="container-fluid">
+            {% for message in app.flashes('danger') %}
+                <div class="alert alert-danger">
+                    {{ message }}
+                </div>
+            {% endfor %}
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <a href="{{ path('modele_index') }}" class="btn btn-outline-info btn-sm"><i
+                                        class="fa fa-arrow-left"></i> {{ 'bo.return'|trans }}
+                            </a>
+                        </div>
+                        <div class="card-body">
+                            {{ include('modele/_form.html.twig') }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        $(function () {
+            validateForm($('#model_form'))
+        });
+    </script>
+{% endblock %}
+

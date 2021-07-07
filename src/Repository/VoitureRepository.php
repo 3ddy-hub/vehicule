@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Constant\StatusValidation;
 use App\Entity\Voiture;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -34,11 +35,17 @@ class VoitureRepository extends ServiceEntityRepository
     {
         $is_save = false;
         if ($voiture instanceof Voiture) {
-            if ($action = 'new') {
+            $exist = $this->findOneBy(['immatriculation' => $voiture->getImmatriculation()]);
+            if ($action == 'new' && !$exist->getImmatriculation()) {
                 $this->_em->persist($voiture);
+                $is_save = true;
+            } elseif ($action == 'update' &&
+                ($exist === $voiture ||
+                    $exist->getImmatriculation() !== $voiture->getImmatriculation())) {
+                $is_save = true;
             }
-            $this->_em->flush();
-            $is_save = true;
+            if ($is_save)
+                $this->_em->flush();
         }
 
         return $is_save;
