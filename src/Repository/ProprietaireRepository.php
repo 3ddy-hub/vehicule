@@ -14,37 +14,118 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class ProprietaireRepository extends ServiceEntityRepository
 {
+    /**
+     * ProprietaireRepository constructor.
+     * @param ManagerRegistry $registry
+     */
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Proprietaire::class);
     }
 
-    // /**
-    //  * @return Proprietaire[] Returns an array of Proprietaire objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    /**
+     * @param $propretary
+     * @param $action
+     * @return bool
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    public function savePropretary($propretary, $action)
     {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('p.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
+        $is_save = false;
+        if ($propretary instanceof Proprietaire) {
+            if ($action == 'new') {
+                $this->_em->persist($propretary);
+            }
+            $this->_em->flush();
+            $is_save = true;
+        }
 
-    /*
-    public function findOneBySomeField($value): ?Proprietaire
-    {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        return $is_save;
     }
-    */
+
+    /**
+     * @param $propretary
+     * @return bool
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    public function deletePropretary($propretary)
+    {
+        $is_deleted = false;
+        if ($propretary instanceof Proprietaire) {
+            $this->_em->remove($propretary);
+            $this->_em->flush();
+            $is_deleted = true;
+        }
+
+        return $is_deleted;
+    }
+
+    /**
+     * @param $page
+     * @param $nb_max_page
+     * @param $search
+     * @param $order_by
+     * @return array
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function listModele($page, $nb_max_page, $search, $order_by)
+    {
+        $order_by   = $order_by ? $order_by : "p.id DESC";
+        $propretary = $this->getEntityName();
+
+        $dql = "SELECT 
+                    v.marque marque,
+                    p.nom nom,
+                    p.prenom prenom,
+                    p.addresse addresse,
+                    p.code_postal code_postal,
+                    p.ville ville,
+                    p.tel tel,
+                    p.id propertary_id,
+                FROM $propretary p
+                LEFT JOIN p.voiture v 
+                WHERE v.marque LIKE :search 
+                    OR p.nom LIKE :search 
+                    OR p.prenom LIKE :search
+                    OR p.addresse LIKE :search
+                    OR p.code_postal LIKE :search
+                    OR p.ville LIKE :search
+                    OR p.tel LIKE :search
+                ORDER BY $order_by";
+
+        $query = $this->_em->createQuery($dql);
+        $query->setParameter('search', "%$search%")
+            ->setFirstResult($page)
+            ->setMaxResults($nb_max_page);
+
+        return [$query->getResult(), $this->compteData($search)];
+    }
+
+    /**
+     * @param $search
+     * @return mixed
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    private function compteData($search)
+    {
+        $modele = $this->getEntityName();
+
+        $dql = "SELECT COUNT (p) total_number 
+                FROM $modele p 
+                LEFT JOIN p.voiture v
+                WHERE v.marque LIKE :search 
+                    OR p.nom LIKE :search 
+                    OR p.prenom LIKE :search
+                    OR p.addresse LIKE :search
+                    OR p.code_postal LIKE :search
+                    OR p.ville LIKE :search
+                    OR p.tel LIKE :search";
+
+        $_query = $this->_em->createQuery($dql);
+        $_query->setParameter('search', "%$search%");
+
+        return $_query->getOneOrNullResult()['total_number'];
+    }
 }

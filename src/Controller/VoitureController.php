@@ -97,7 +97,7 @@ class VoitureController extends AbstractController
     /**
      * @Route("/{id}/delete", name="voiture_delete")
      */
-    public function delete(Request $request, Voiture $voiture): Response
+    public function delete(Voiture $voiture): Response
     {
         $status_deleted = $this->voirture_repository->deleteVoiture($voiture);
 

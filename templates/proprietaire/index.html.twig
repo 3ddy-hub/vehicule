@@ -1,45 +1,59 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Proprietaire index{% endblock %}
+{% block title %}{{ 'bo.propritaries'|trans }}{% endblock %}
 
-{% block body %}
-    <h1>Proprietaire index</h1>
+{% set proprietaire_link = true %}
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Nom</th>
-                <th>Prenom</th>
-                <th>Addresse</th>
-                <th>Code_postal</th>
-                <th>Ville</th>
-                <th>Tel</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for proprietaire in proprietaires %}
-            <tr>
-                <td>{{ proprietaire.id }}</td>
-                <td>{{ proprietaire.nom }}</td>
-                <td>{{ proprietaire.prenom }}</td>
-                <td>{{ proprietaire.addresse }}</td>
-                <td>{{ proprietaire.codePostal }}</td>
-                <td>{{ proprietaire.ville }}</td>
-                <td>{{ proprietaire.tel }}</td>
-                <td>
-                    <a href="{{ path('proprietaire_show', {'id': proprietaire.id}) }}">show</a>
-                    <a href="{{ path('proprietaire_edit', {'id': proprietaire.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="8">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
-    <a href="{{ path('proprietaire_new') }}">Create new</a>
+{% block breadcrumb %}
+    {% include 'partials/breadcrumb.html.twig' with {
+        'title' : 'bo.propritaries'|trans,
+    } %}
+{% endblock %}
+{% block container %}
+    <section class="content">
+        <div class="container-fluid">
+            {% for message in app.flashes('success') %}
+                <div class="alert alert-success">
+                    {{ message }}
+                </div>
+            {% endfor %}
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <a href="{{ path('proprietaire_new') }}" class="btn btn-outline-primary btn-sm"><i
+                                        class="fa fa-plus"></i> {{ 'bo.add'|trans }}</a>
+                        </div>
+                        <div class="card-body">
+                            <table id="proprietary-list" class="table table-bordered table-striped">
+                                <thead>
+                                <tr>
+                                    <th>{{ 'bo.brand'|trans }}</th>
+                                    <th>{{ 'bo.lastname'|trans }}</th>
+                                    <th>{{ 'bo.firstname'|trans }}</th>
+                                    <th>{{ 'bo.address'|trans }}</th>
+                                    <th>{{ 'bo.postal.code'|trans }}</th>
+                                    <th>{{ 'bo.tel'|trans }}</th>
+                                    <th>{{ 'bo.action'|trans }}</th>
+                                </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        // url ajax
+        let url_proprietary_ajax_list = "{{ path('voiture_ajax_list') }}";
+        // btn ud
+        let edit_path = "{{ path('proprietaire_edit',{'id':0}) }}"
+        let delete_path = "{{ path('proprietaire_delete',{'id':0}) }}"
+    </script>
+    <script src="{{ asset('js/proprietary.ajax.list.js') }}"></script>
 {% endblock %}

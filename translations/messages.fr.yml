@@ -32,7 +32,7 @@ bo.field.password.required: Veuillez fournir un mot de passe.
 bo.field.password.required.length: Votre mot de passe doit comporter au moins 6 caractères.
 
 # voiture
-bo.immatriculation : Immatriculation
+bo.immatriculation: Immatriculation
 bo.color: Couleur
 bo.km: Kilometrage
 bo.voiture: Voiture
@@ -44,3 +44,13 @@ bo.models: Modèles
 bo.brand: Marque
 bo.puissance: Puissance
 bo.carburant: Carburant
+
+# proprietaire
+bo.propritaries: Proprietaires
+bo.propritary: Proprietaire
+bo.postal.code: Code postal
+bo.ville: Ville
+bo.lastname: Nom
+bo.firstname: Prénom
+bo.tel: Téléphone
+bo.address: Addresse

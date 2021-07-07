@@ -6,23 +6,37 @@ use App\Entity\Proprietaire;
 use App\Form\ProprietaireType;
 use App\Repository\ProprietaireRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * @Route("/proprietaire")
  */
 class ProprietaireController extends AbstractController
 {
+    private $propretary_repository;
+    private $translator;
+
     /**
-     * @Route("/", name="proprietaire_index", methods={"GET"})
+     * ProprietaireController constructor.
+     * @param ProprietaireRepository $proprietaire_repository
+     * @param TranslatorInterface $translator
      */
-    public function index(ProprietaireRepository $proprietaireRepository): Response
+    public function __construct(ProprietaireRepository $proprietaire_repository, TranslatorInterface $translator)
     {
-        return $this->render('proprietaire/index.html.twig', [
-            'proprietaires' => $proprietaireRepository->findAll(),
-        ]);
+        $this->propretary_repository = $proprietaire_repository;
+        $this->translator            = $translator;
+    }
+
+    /**
+     * @Route("/", name="proprietaire_index")
+     */
+    public function index()
+    {
+        return $this->render('proprietaire/index.html.twig');
     }
 
     /**
@@ -31,30 +45,19 @@ class ProprietaireController extends AbstractController
     public function new(Request $request): Response
     {
         $proprietaire = new Proprietaire();
-        $form = $this->createForm(ProprietaireType::class, $proprietaire);
+        $form         = $this->createForm(ProprietaireType::class, $proprietaire);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($proprietaire);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('proprietaire_index');
+            $is_create = $this->propretary_repository->savePropretary($proprietaire, 'new');
+            if ($is_create) {
+                return $this->redirectToRoute('proprietaire_index');
+            }
         }
 
         return $this->render('proprietaire/new.html.twig', [
             'proprietaire' => $proprietaire,
-            'form' => $form->createView(),
-        ]);
-    }
-
-    /**
-     * @Route("/{id}", name="proprietaire_show", methods={"GET"})
-     */
-    public function show(Proprietaire $proprietaire): Response
-    {
-        return $this->render('proprietaire/show.html.twig', [
-            'proprietaire' => $proprietaire,
+            'form'         => $form->createView(),
         ]);
     }
 
@@ -67,28 +70,51 @@ class ProprietaireController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
-
-            return $this->redirectToRoute('proprietaire_index');
+            $is_update = $this->propretary_repository->savePropretary($proprietaire, 'update');
+            if ($is_update) {
+                return $this->redirectToRoute('proprietaire_index');
+            }
         }
 
         return $this->render('proprietaire/edit.html.twig', [
             'proprietaire' => $proprietaire,
-            'form' => $form->createView(),
+            'form'         => $form->createView(),
         ]);
     }
 
     /**
-     * @Route("/{id}", name="proprietaire_delete", methods={"POST"})
+     * @Route("/{id}", name="proprietaire_delete")
      */
-    public function delete(Request $request, Proprietaire $proprietaire): Response
+    public function delete(Proprietaire $proprietaire)
     {
-        if ($this->isCsrfTokenValid('delete'.$proprietaire->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($proprietaire);
-            $entityManager->flush();
+        $status_deleted = $this->propretary_repository->deletePropretary($proprietaire);
+        if ($status_deleted) {
+            $this->addFlash('success', $this->translator->trans('bo.delete.succefuly'));
         }
 
         return $this->redirectToRoute('proprietaire_index');
+    }
+
+    /**
+     * @Route("/list-ajax", name="propretary_ajax_list")
+     * @param Request $request
+     * @return JsonResponse
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function ajaxList(Request $request)
+    {
+        $page        = $request->query->get('start');
+        $nb_max_page = $request->query->get('length');
+        $search      = $request->query->get('search')['value'];
+        $order_by    = $request->query->get('order_by');
+        $datas       = $this->propretary_repository->listModele($page, $nb_max_page, $search, $order_by);
+
+        return new JsonResponse([
+            'recordsTotal'    => $datas[1],
+            'recordsFiltered' => $datas[1],
+            'data'            => array_map(function ($_val) {
+                return array_values($_val);
+            }, $datas[0])
+        ]);
     }
 }

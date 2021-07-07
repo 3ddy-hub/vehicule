@@ -87,17 +87,16 @@ class ModeleController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="modele_delete", methods={"POST"})
+     * @Route("/{id}", name="modele_delete")
      */
-    public function delete(Request $request, Modele $modele): Response
+    public function delete(Modele $modele)
     {
-        if ($this->isCsrfTokenValid('delete' . $modele->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($modele);
-            $entityManager->flush();
+        $status_deleted = $this->modele_repository->deleteVoiture($modele);
+        if ($status_deleted) {
+            $this->addFlash('success', $this->translator->trans('bo.delete.succefuly'));
         }
 
-        return $this->redirectToRoute('modele_index');
+        return $this->redirectToRoute('proprietaire_index');
     }
 
     /**
