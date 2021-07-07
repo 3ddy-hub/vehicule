@@ -141,6 +141,7 @@ class ProprietaireRepository extends ServiceEntityRepository
         $dql     = "SELECT 
                         m.modele modele,
                         m.marque marque,
+                        v.couleur couleur,
                         v.id voiture_id 
                     FROM $voiture v 
                     LEFT JOIN v.modele m";

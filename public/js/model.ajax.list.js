@@ -43,8 +43,7 @@ $(document).ready(function () {
                     href_delete = delete_path.replace('0', data);
 
                     let actions = '<td>' +
-                        ' <a href="' + href_edit + '" class="btn btn-sm btn-warning"><i class="fa fa-edit"></i>' + update_text + '</a>' +
-                        ' <a href="' + href_delete + '" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i> ' + delete_text + '</a></div></td>';
+                        ' <a href="' + href_edit + '" class="btn btn-sm btn-warning"><i class="fa fa-edit"></i>' + update_text + '</a>' ;
                     return actions;
                 }
             }

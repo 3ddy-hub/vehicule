@@ -14,6 +14,8 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class ModeleRepository extends ServiceEntityRepository
 {
+    private $voiture_repository;
+
     /**
      * ModeleRepository constructor.
      * @param ManagerRegistry $registry
@@ -54,7 +56,7 @@ class ModeleRepository extends ServiceEntityRepository
     {
         $is_deleted = false;
         if ($modele instanceof Modele) {
-            $this->_em->remove($modele);
+             $this->_em->remove($modele);
             $this->_em->flush();
             $is_deleted = true;
         }

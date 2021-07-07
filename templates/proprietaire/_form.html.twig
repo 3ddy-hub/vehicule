@@ -4,10 +4,10 @@
         <select class="form-control" name="voiture" id="">
             {% if type == 'update' %}
                 <option value="{{ proprietaire.voiture.id }}">{{ proprietaire.voiture.modele.modele }}
-                    - {{ proprietaire.voiture.modele.marque }} </option>
+                    - {{ proprietaire.voiture.modele.marque }} - {{ proprietaire.voiture.couleur }}</option>
             {% endif %}
             {% for key,v in voitures %}
-                <option value="{{ v.voiture_id }}">{{ v.modele }} - {{ v.marque }} </option>
+                <option value="{{ v.voiture_id }}">{{ v.modele }} - {{ v.marque }} - {{ v.couleur }}</option>
             {% endfor %}
         </select>
     </div>

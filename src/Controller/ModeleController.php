@@ -5,6 +5,8 @@ namespace App\Controller;
 use App\Entity\Modele;
 use App\Form\ModeleType;
 use App\Repository\ModeleRepository;
+use App\Repository\VoitureRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,17 +22,27 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class ModeleController extends AbstractController
 {
     private $modele_repository;
+    private $voiture_repository;
+    private $em;
     private $translator;
 
     /**
      * ModeleController constructor.
      * @param ModeleRepository $modele_repository
+     * @param VoitureRepository $voiture_repository
+     * @param EntityManagerInterface $em
      * @param TranslatorInterface $translator
      */
-    public function __construct(ModeleRepository $modele_repository, TranslatorInterface $translator)
+    public function __construct(
+        ModeleRepository $modele_repository,
+        VoitureRepository $voiture_repository,
+        EntityManagerInterface $em,
+        TranslatorInterface $translator)
     {
-        $this->modele_repository = $modele_repository;
-        $this->translator        = $translator;
+        $this->modele_repository  = $modele_repository;
+        $this->voiture_repository = $voiture_repository;
+        $this->translator         = $translator;
+        $this->em                 = $em;
     }
 
     /**
@@ -96,7 +108,7 @@ class ModeleController extends AbstractController
             $this->addFlash('success', $this->translator->trans('bo.delete.succefuly'));
         }
 
-        return $this->redirectToRoute('proprietaire_index');
+        return $this->redirectToRoute('modele_index');
     }
 
     /**

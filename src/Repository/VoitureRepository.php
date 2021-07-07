@@ -36,7 +36,8 @@ class VoitureRepository extends ServiceEntityRepository
         $is_save = false;
         if ($voiture instanceof Voiture) {
             $exist = $this->findOneBy(['immatriculation' => $voiture->getImmatriculation()]);
-            if ($action == 'new' && !$exist->getImmatriculation()) {
+            $is_im_xist = $exist !== null ? $exist->getImmatriculation() : false;
+            if ($action == 'new' && !$is_im_xist) {
                 $this->_em->persist($voiture);
                 $is_save = true;
             } elseif ($action == 'update' &&
