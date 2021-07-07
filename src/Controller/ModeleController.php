@@ -15,7 +15,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
- * @Route("/modele")
+ * @Route("/admin/modele")
  * Class ModeleController
  * @package App\Controller
  */

@@ -14,7 +14,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
- * @Route("/proprietaire")
+ * @Route("/admin/proprietaire")
  */
 class ProprietaireController extends AbstractController
 {

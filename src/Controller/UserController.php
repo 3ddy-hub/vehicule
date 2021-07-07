@@ -14,7 +14,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
- * @Route("/user")
+ * @Route("/admin/user")
  * Class UserController
  * @package App\Controller
  */

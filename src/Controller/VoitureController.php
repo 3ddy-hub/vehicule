@@ -13,7 +13,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
- * @Route("/voiture")
+ * @Route("/admin/voiture")
  * Class VoitureController
  * @package App\Controller
  */
